@@ -66,6 +66,7 @@ $( document ).ready(function() {
       data: $('#newBookForm').serialize(),
       success: function(data) {
         //update list
+       alert("Do you want to add new book titled as...?"+data.title)
       }
     });
   });
@@ -78,6 +79,7 @@ $( document ).ready(function() {
       data: $('#newBookForm').serialize(),
       success: function(data) {
         //update list
+        alert("Are you sure to delete all books?")
       }
     });
   }); 
