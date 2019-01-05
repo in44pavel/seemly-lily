@@ -20,17 +20,12 @@ module.exports = function (app) {
   app.route('/api/books')
     .get(function (req, res){
       //response will be array of book objects
-    
-   // var searchQuery = req.query;
-   //   if (searchQuery._id) { searchQuery._id = new ObjectId(searchQuery._id)}
    
     MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           
-      if(err) {
-        console.log('Database error: ' + err);
-      } else {
-        console.log('Successful database connection');  
-      }
+      if(err) {console.log('Database error: ' + err);
+      } else {console.log('Successful database connection');}
+      
     var collection = db.collection("books");
         collection.find(/*searchQuery*/{}).toArray(function(err,docs){res.json(docs)});
      })
@@ -49,12 +44,9 @@ module.exports = function (app) {
         
     MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           
-      if(err) {
-        console.log('Database error: ' + err);
-      } else {
-        console.log('Successful database connection');  
-      }
-     //console.log(res);
+      if(err) {console.log('Database error: ' + err);
+      } else {console.log('Successful database connection');}
+      
       
       var collection = db.collection('books');
           collection.insertOne(output,function(err,doc){
@@ -66,25 +58,22 @@ module.exports = function (app) {
     }
     })
     
-     .delete(/*'/api/books/:delete',*/function(req, res){
-      //if successful response will be 'complete delete successful'
+   .delete(function(req, res){
     
-   /* var searchQuery = req.query;
-      if (searchQuery._id) { searchQuery._id = new ObjectId(searchQuery._id)}
-   
-     MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
+    
+    MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           
-      if(err) {
-        console.log('Database error: ' + err);
-    } else {
-        console.log('Successful database connection');  
-    }
-    var collection = db.collection("books");
-        collection.find(searchQuery).remove(function(err,docs){res.send('complete delete successful')});
-     */
-     
-    
-    });
+      if(err) {console.log('Database error: ' + err);
+      } else {console.log('Successful database connection');}
+      
+      var collection = db.collection("books");
+        collection.remove({},function(err,docs){
+          
+          if(err) return console.log(err); 
+          res.send('deleted successful')
+        })
+    })
+  });
 
 
 
@@ -96,11 +85,9 @@ module.exports = function (app) {
    
     MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           
-      if(err) {
-        console.log('Database error: ' + err);
-      } else {
-        console.log('Successful database connection');  
-      }
+      if(err) {console.log('Database error: ' + err);
+      } else {console.log('Successful database connection');}
+      
     var collection = db.collection("books");
         collection.find(bookid).toArray(function(err,docs){
           //output._id = docs.insertedId;
@@ -114,19 +101,12 @@ module.exports = function (app) {
     .post(function(req, res){
       var bookid = req.params.id;
       var comment = req.body.comment;
-       
-      //var output={"title":title, 'commentcount':comment.length,'comment':comment}
-      
-    // if (bookid){ bookid = new ObjectId(bookid)}
     
-    console.log(bookid+'==----'+comment)
     MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           
-      if(err) {
-        console.log('Database error: ' + err);
-      } else {
-        console.log('Successful database connection');  
-      }
+      if(err) {console.log('Database error: ' + err);
+      } else {console.log('Successful database connection');}
+      
     var collection = db.collection("books");
         collection.findAndModify(
           {_id:new ObjectId(bookid)},[['_id',1]],{$inc:{commentcount:1},$push:{comment:comment}},{new: true},
@@ -145,11 +125,8 @@ module.exports = function (app) {
     
     MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           
-      if(err) {
-        console.log('Database error: ' + err);
-      } else {
-        console.log('Successful database connection');  
-      }
+      if(err) {console.log('Database error: ' + err);
+      } else {console.log('Successful database connection');}
       
       var collection = db.collection("books");
         collection.findOneAndDelete({_id: bookid},function(err,docs){
